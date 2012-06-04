@@ -1,6 +1,6 @@
-from LK import *
-from BB import *
-from medain import *
+from lk import *
+from bb import *
+from median import *
 from copy import deepcopy
 
 def fbtrack(imgI, imgJ, bb):

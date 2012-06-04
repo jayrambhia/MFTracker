@@ -1,4 +1,5 @@
-from SimpleCV import *
+from SimpleCV import Camera, Image, Display
+from fbtrack import *
 
 def mftrack():
     cam = Camera()
@@ -36,7 +37,7 @@ def mftrack():
             print newbb, shift
             img1.drawBB((newbb[0],newbb[1]),(newbb[2],newbb[3]),width=5)
             img1.save(d)
-            time.sleep(0.03)
+            time.sleep(0.1)
             i = img1.copy()
             img1 = cam.getImage()
         except KeyboardInterrupt:
