@@ -1,10 +1,43 @@
 from median import *
 
 def calculateBBCenter(bb):
+    """
+    
+    **SUMMARY**
+    
+    Calculates the center of the given bounding box
+    
+    **PARAMETERS**
+    
+    bb - Bounding Box represented through 2 points (x1,y1,x2,y2)
+    
+    **RETURNS**
+    
+    center - A tuple of two floating points
+    
+    """
     center = (0.5*(bb[0] + bb[2]),0.5*(bb[1]+bb[3]))
     return center
     
 def getFilledBBPoints(bb, numM, numN, margin):
+    """
+    
+    **SUMMARY**
+    
+    Creates numM x numN points grid on Bounding Box
+    
+    **PARAMETERS**
+    
+    bb - Bounding Box represented through 2 points (x1,y1,x2,y2)
+    numM - Number of points in height direction.
+    numN - Number of points in width direction.
+    margin - margin (in pixel)
+    
+    **RETURNS**
+    
+    pt - A list of points (pt[0] - x1, pt[1] - y1, pt[2] - x2, ..)
+    
+    """
     pointDim = 2
     bb_local = (bb[0] + margin, bb[1] + margin, bb[2] - margin, bb[3] - margin)
     if numM == 1 and numN == 1 :
@@ -52,12 +85,63 @@ def getFilledBBPoints(bb, numM, numN, margin):
     return pt
 
 def getBBWidth(bb):
+    """
+    
+    **SUMMARY**
+    
+    Get width of the bounding box
+    
+    **PARAMETERS**
+    
+    bb - Bounding Box represented through 2 points (x1,y1,x2,y2)
+    
+    **RETURNS**
+    
+    width of the bounding box
+    
+    """
     return bb[2]-bb[0]+1
     
 def getBBHeight(bb):
+    """
+    
+    **SUMMARY**
+    
+    Get height of the bounding box
+    
+    **PARAMETERS**
+    
+    bb - Bounding Box represented through 2 points (x1,y1,x2,y2)
+    
+    **RETURNS**
+    
+    height of the bounding box
+    
+    """
     return bb[3]-bb[1]+1
     
 def predictBB(bb0, pt0, pt1, nPts):
+    """
+    
+    **SUMMARY**
+    
+    Calculates the new (moved and resized) Bounding box.
+    Calculation based on all relative distance changes of all points
+    to every point. Then the Median of the relative Values is used.
+    
+    **PARAMETERS**
+    
+    bb0 - Bounding Box represented through 2 points (x1,y1,x2,y2)
+    pt0 - Starting Points
+    pt1 - Target Points
+    nPts - Total number of points (eg. len(pt0))
+    
+    **RETURNS**
+    
+    bb1 - new bounding box
+    shift - relative scale change of bb0
+    
+    """
     ofx = []
     ofy = []
     for i in range(nPts):

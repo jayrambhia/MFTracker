@@ -4,11 +4,33 @@ import math
 import time
 import numpy as np
 
-def lktrack(img1, img2, ptsI, nPtsI, ptsJ, nPtsJ):
-    winsize_ncc = 10
+def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10):
+    """
+    **SUMMARY**
+    
+    Lucas-Kanede Tracker with pyramids
+    
+    **PARAMETERS**
+    
+    img1 - Previous image or image containing the known bounding box (Numpy array)
+    img2 - Current image
+    ptsI - Points to track from the first image
+           Format ptsI[0] - x1, ptsI[1] - y1, ptsI[2] - x2, ..
+    nPtsI - Number of points to track from the first image
+    winsize_ncc - size of the search window at each pyramid level in LK tracker (in int)
+    
+    **RETURNS**
+    
+    fb - forward-backward confidence value. (corresponds to euclidean distance between).
+    ncc - normCrossCorrelation values
+    status - Indicates positive tracks. 1 = PosTrack 0 = NegTrack
+    ptsJ - Calculated Points of second image
+    
+    """
     template_pt = []
     target_pt = []
     fb_pt = []
+    ptsJ = [0.0]*len(ptsI)
     win_size_lk = 4
     for i in range(nPtsI):
         template_pt.append((ptsI[2*i],ptsI[2*i+1]))
