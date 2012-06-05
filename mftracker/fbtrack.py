@@ -41,19 +41,17 @@ def fbtrack(imgI, imgJ, bb, numM=10, numN=10,margin=5,winsize_ncc=10):
     nccLKCleaned = [0.0]*nlkPoints
     M = 2
     nRealPoints = 0
-    print len(fbLKCleaned)
-    print nPoints
+    
     for i in range(nPoints):
         if ptTracked[M*i] is not None:
             startPoints.append((pt[2 * i],pt[2*i+1]))
             targetPoints.append((ptTracked[2 * i], ptTracked[2 * i + 1]))
-            
             fbLKCleaned[nRealPoints]=fb[i]
-            nccLKCleaned[nRealPoints]=ncc[i]
+            nccLKCleaned[nRealPoints]=ncc[i][0][0]
             nRealPoints+=1
             
-    medFb = getMedian(fbLKCleaned, nlkPoints)
-    medNcc = getMedian(nccLKCleaned, nlkPoints)
+    medFb = getMedian(fbLKCleaned)
+    medNcc = getMedian(nccLKCleaned)
     
     nAfterFbUsage = 0
     for i in range(nlkPoints):

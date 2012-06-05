@@ -1,6 +1,6 @@
-def getMedianUnmanaged(a, n):
+def getMedianUnmanaged(a):
     low = 0
-    high = n - 1
+    high = len(a) - 1
     median = (low + high) / 2
     while True:
         if high < 0:
@@ -53,7 +53,7 @@ def getMedianUnmanaged(a, n):
         if hh >= median:
             high = hh - 1
 
-def getMedian(a, n):
-    median = getMedianUnmanaged(a, n)
+def getMedian(a):
+    median = getMedianUnmanaged(a)
     return median
 

@@ -33,7 +33,7 @@ def mftrack():
     print "fbtrack"
     while True:
         try:
-            newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), bb)
+            newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), newbb, 12, 12, 3, 12)
             print newbb, shift
             img1.drawBB((newbb[0],newbb[1]),(newbb[2],newbb[3]),width=5)
             img1.save(d)

@@ -148,8 +148,8 @@ def predictBB(bb0, pt0, pt1, nPts):
         ofx.append(pt1[i][0]-pt0[i][0])
         ofy.append(pt1[i][1]-pt0[i][1])
     
-    dx = getMedianUnmanaged(ofx, nPts)
-    dy = getMedianUnmanaged(ofy, nPts)
+    dx = getMedianUnmanaged(ofx)
+    dy = getMedianUnmanaged(ofy)
     ofx=ofy=0
     
     lenPdist = nPts * (nPts - 1) / 2
@@ -160,13 +160,15 @@ def predictBB(bb0, pt0, pt1, nPts):
             temp1 = ((pt1[i][0] - pt1[j][0])**2 + (pt1[i][1] - pt1[j][1])**2)**0.5
             dist0.append(float(temp1)/temp0)
             
-    shift = getMedianUnmanaged(dist0, lenPdist)
+    shift = getMedianUnmanaged(dist0)
     
     s0 = 0.5 * (shift - 1) * getBBWidth(bb0)
     s1 = 0.5 * (shift - 1) * getBBHeight(bb0)
     
-    bb1 = (bb0[0] - s0 + dx, bb0[1] - s1 + dy,
-           bb0[2] + s0 + dx, bb0[3] + s1 + dy)
+    bb1 = (abs(bb0[0] + s0 + dx),
+           abs(bb0[1] + s1 + dy),
+           abs(bb0[2] + s0 + dx), 
+           abs(bb0[3] + s1 + dy))
               
     return (bb1, shift)
     
