@@ -33,12 +33,13 @@ def mftrack():
     print "fbtrack"
     while True:
         try:
-            newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), newbb, 12, 12, 3, 12)
+            newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), bb, 12, 12, 3, 12)
             print newbb, shift
             img1.drawBB((newbb[0],newbb[1]),(newbb[2],newbb[3]),width=5)
             img1.save(d)
             time.sleep(0.1)
             i = img1.copy()
             img1 = cam.getImage()
+            bb = newbb
         except KeyboardInterrupt:
             break
