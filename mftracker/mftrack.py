@@ -25,12 +25,10 @@ def mftrack():
             break
     if not p1 or not p2:
         return None
-    try:    
-        bb = img.drawBB(p1,p2,width=5)
-    except AttributeError:
-        bb = getBB(p1,p2)
-        rect = getRectFromBB(bb)
-        img.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
+    
+    bb = getBB(p1,p2)
+    rect = getRectFromBB(bb)
+    img.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
     i = img.copy()
     img.save(d)
     time.sleep(0.5)
@@ -39,11 +37,8 @@ def mftrack():
         try:
             newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), bb, 12, 12, 3, 12)
             print newbb, shift
-            try:
-                img1.drawBB((newbb[0],newbb[1]),(newbb[2],newbb[3]),width=5)
-            except AttributeError:
-                rect = getRectFromBB(bb)
-                img1.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
+            rect = getRectFromBB(bb)
+            img1.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
             img1.save(d)
             time.sleep(0.1)
             i = img1.copy()
