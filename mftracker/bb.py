@@ -1,5 +1,5 @@
 from median import *
-
+import numpy as np
 def calculateBBCenter(bb):
     """
     
@@ -171,4 +171,14 @@ def predictBB(bb0, pt0, pt1, nPts):
            abs(bb0[3] + s1 + dy))
               
     return (bb1, shift)
+    
+def getBB(pt0,pt1):
+    xmax = np.max((pt0[0],pt1[0]))
+    xmin = np.min((pt0[0],pt1[0]))
+    ymax = np.max((pt0[1],pt1[1]))
+    ymin = np.min((pt0[1],pt1[1]))
+    return xmin,ymin,xmax,ymax
+    
+def getRectFromBB(bb):
+    return bb[0],bb[1],bb[0]-bb[2],bb[1]-bb[3]
     

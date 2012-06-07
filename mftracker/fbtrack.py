@@ -1,7 +1,6 @@
 from lk import *
 from bb import *
 from median import *
-from copy import deepcopy
 
 def fbtrack(imgI, imgJ, bb, numM=10, numN=10,margin=5,winsize_ncc=10):
     """
