@@ -1,8 +1,7 @@
-from SimpleCV import Camera, Image, Display
-from fbtrack import *
-from bb import getBB, getRectFromBB
+from SimpleCV import VirtualCamera, Image, Display
+from mftracker import *
 
-def mftrack():
+def tracker():
     cam = VirtualCamera("inputcar.avi","video")
     p1 = None
     p2 = None
@@ -46,3 +45,4 @@ def mftrack():
             img1 = cam.getImage()
         except KeyboardInterrupt:
             break
+tracker()
