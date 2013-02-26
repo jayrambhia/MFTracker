@@ -3,7 +3,7 @@ import cv2.cv as cv
 import math
 import time
 import numpy as np
-import scipy.spatial.distance as spsd
+
 
 def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10, win_size_lk=4, method=cv2.cv.CV_TM_CCOEFF_NORMED):
     """
@@ -30,11 +30,14 @@ def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10, win_size_lk=4, method=cv2.c
     ptsJ - Calculated Points of second image
     
     """
-    template_pt = []
-    target_pt = []
-    fb_pt = []
-    ptsJ = [-1]*len(ptsI)
-    
+    ptsI = ptsI.astype("float32")
+    template_pt = np.copy(ptsI)
+    target_pt = np.copy(ptsI)
+    fb_pt = np.copy(ptsI)
+    ptsJ = -1*np.ones(shape=(nPtsI, 2))
+#    ptsJ = [-1]*len(ptsI)
+
+    """
     for i in range(nPtsI):
         template_pt.append((ptsI[2*i],ptsI[2*i+1]))
         target_pt.append((ptsI[2*i],ptsI[2*i+1]))
@@ -43,7 +46,7 @@ def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10, win_size_lk=4, method=cv2.c
     template_pt = np.asarray(template_pt,dtype="float32")
     target_pt = np.asarray(target_pt,dtype="float32")
     fb_pt = np.asarray(fb_pt,dtype="float32")
-    
+    """
     target_pt, status, track_error = cv2.calcOpticalFlowPyrLK(img1, img2, template_pt, target_pt, 
                                      winSize=(win_size_lk, win_size_lk), flags = cv2.OPTFLOW_USE_INITIAL_FLOW,
                                      criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
@@ -60,11 +63,11 @@ def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10, win_size_lk=4, method=cv2.c
     newncc = -1*np.ones(len(ncc))
     for i in np.argwhere(status):
         i = i[0]
-        ptsJ[2 * i] = target_pt[i][0]
-        ptsJ[2 * i + 1] = target_pt[i][1]
+        ptsJ[i] = target_pt[i]
         newfb[i] = fb[i]
         newncc[i] = ncc[i]
-
+    #print status
+    #print len(newfb), len(newncc), len(status), len(ptsJ)
     return newfb, newncc, status, ptsJ
     
 def euclideanDistance(point1,point2):

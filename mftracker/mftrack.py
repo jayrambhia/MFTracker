@@ -77,3 +77,5 @@ class mftrack:
                 cv2.destroyAllWindows()
                 break
         return None
+
+mftrack()
