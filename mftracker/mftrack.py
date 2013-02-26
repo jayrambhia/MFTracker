@@ -8,6 +8,7 @@ class mftrack:
         self.mouse_drag = False
         self.bb = None
         self.img = None
+        self.mouseFlag = True
         if source:
             self.cam = cv2.VideoCapture(source)
         else:
@@ -30,6 +31,8 @@ class mftrack:
         cv2.waitKey(0)
     
     def __mouseHandler(self, event, x, y, flags, params):
+        if self.mouseFlag == False:
+            return
         _, self.img = self.cam.read()
         if event == cv.CV_EVENT_LBUTTONDOWN and not self.mouse_drag:
             self.mouse_p1 = (x, y)
@@ -53,18 +56,24 @@ class mftrack:
             self.track()
 
     def track(self):
+        self.mouseFlag = False
         oldg = cv2.cvtColor(self.img, cv2.cv.CV_BGR2GRAY)
         bb = self.bb
         bb = [bb[0], bb[1], bb[0]+bb[3], bb[1]+bb[3]]
         while True:
+            t = time.time()
             _, img = self.cam.read()
             newg = cv2.cvtColor(img, cv2.cv.CV_BGR2GRAY)
             newbb, shift = fbtrack(oldg, newg, bb, 12, 12, 3, 12)
-            print newbb, "newbb", shift, "shift"
+            #print newbb, "newbb", shift, "shift"
             oldg = newg
             bb = newbb
             cv2.rectangle(img, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 0))
             cv2.imshow("Media Flow Tracker", img)
-            k = cv2.waitKey(10)
+            print (time.time() - t)*1000,"msec"
+            k = cv2.waitKey(1)
             if k == 27:
+                self.mouseFlag = False
+                cv2.destroyAllWindows()
                 break
+        return None

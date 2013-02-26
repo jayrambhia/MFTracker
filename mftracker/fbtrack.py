@@ -26,7 +26,7 @@ def fbtrack(imgI, imgJ, bb, numM=10, numN=10,margin=5,winsize_ncc=10):
     """
     nPoints = numM*numN
     sizePointsArray = nPoints*2
-    print bb, "passed in fbtrack"
+    #print bb, "passed in fbtrack"
     pt = getFilledBBPoints(bb, numM, numN, margin)
     fb, ncc, status, ptTracked = lktrack(imgI, imgJ, pt, nPoints, winsize_ncc)
 
@@ -58,6 +58,6 @@ def fbtrack(imgI, imgJ, bb, numM=10, numN=10,margin=5,winsize_ncc=10):
             nAfterFbUsage+=1
 
     newBB, scaleshift = predictBB(bb, startPoints, targetPoints, nAfterFbUsage)
-    print newBB, "fbtrack passing newBB"
+    #print newBB, "fbtrack passing newBB"
     return (newBB, scaleshift)
 

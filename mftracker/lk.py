@@ -64,7 +64,7 @@ def lktrack(img1, img2, ptsI, nPtsI, winsize_ncc=10, win_size_lk=4, method=cv2.c
         ptsJ[2 * i + 1] = target_pt[i][1]
         newfb[i] = fb[i]
         newncc[i] = ncc[i]
-    print ptsJ, "ptsJ"
+
     return newfb, newncc, status, ptsJ
     
 def euclideanDistance(point1,point2):

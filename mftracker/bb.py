@@ -173,7 +173,7 @@ def predictBB(bb0, pt0, pt1, nPts):
     y2 = bb0[3] + s1 + dy
     w = x2-x1
     h = y2-y1
-    print x1,x2,y1,y2,w,h
+    #print x1,x2,y1,y2,w,h
     if x1 <= 0 or x2 <=0 or y1<=0 or y2 <=0 or w <=20 or h <=20:
         x1 = bb0[0]
         y1 = bb0[1]

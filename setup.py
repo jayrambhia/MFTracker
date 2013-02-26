@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name="mftracker",
-    version = 0.1,
+    version = 0.2,
     download_url = "https://github.com/jayrambhia/MFTracker/downloads/tarball/master",
     description = "Median Flow Tracker using SimpleCV and OpenCV",
     keywords = "opencv, cv, simplecv, opentld, tracking, median flow, lucas kanede",
@@ -9,5 +9,5 @@ setup(name="mftracker",
     author_email = "jayrambhia777@gmail.com",
     license = 'BSD',
     packages = find_packages(),
-    requires = ["cv2","cv","simplecv"]
+    requires = ["cv2","cv"]
     )
