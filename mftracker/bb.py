@@ -180,7 +180,7 @@ def predictBB(bb0, pt0, pt1, nPts):
         x2 = bb0[2]
         y2 = bb0[3]
         
-    bb1 = (x1,y1,x2,y2)
+    bb1 = (int(x1),int(y1),int(x2),int(y2))
               
     return (bb1, shift)
     

@@ -1,48 +1,70 @@
-from SimpleCV import Camera, Image, Display
 from fbtrack import *
 from bb import getBB, getRectFromBB
-
-def mftrack():
-    cam = Camera()
-    p1 = None
-    p2 = None
-    d = Display()
-    while d.isNotDone():
-        try:
-            img = cam.getImage()
-            a=img.save(d)
-            dwn = d.leftButtonDownPosition()
-            up = d.leftButtonUpPosition()
-            
-            if dwn:
-                p1 = dwn
-            if up:
-                p2 = up
-                break
-
-            time.sleep(0.1)
-        except KeyboardInterrupt:
-            break
-    if not p1 or not p2:
-        return None
+import cv2
+class mftrack:
+    def __init__(self, source=None, bb=None):
+        self.mouse_p1 = None
+        self.mouse_p2 = None
+        self.mouse_drag = False
+        self.bb = None
+        self.img = None
+        if source:
+            self.cam = cv2.VideoCapture(source)
+        else:
+            self.cam = cv2.VideoCapture(0)
+        if not bb:
+            self.start()
+        else:
+            self.bb = bb
+            _, self.img = self.cam.read()
+            self.track()
+        
+    def start(self):
+        _, self.img = self.cam.read()
+        cv2.imshow("img", self.img)
+        cv.SetMouseCallback("img", self.__mouseHandler, None)
+        if not self.bb:
+            _, self.img = self.cam.read()
+            cv2.imshow("img", self.img)
+            cv2.waitKey(30)
+        cv2.waitKey(0)
     
-    bb = getBB(p1,p2)
-    rect = getRectFromBB(bb)
-    img.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
-    i = img.copy()
-    img.save(d)
-    time.sleep(0.5)
-    img1 = cam.getImage()
-    while True:
-        try:
-            newbb, shift = fbtrack(i.getGrayNumpy(),img1.getGrayNumpy(), bb, 12, 12, 3, 12)
-            print newbb, shift
-            rect = getRectFromBB(bb)
-            img1.drawRectangle(rect[0],rect[1],rect[2],rect[3],width=5)
-            img1.save(d)
-            time.sleep(0.1)
-            i = img1.copy()
+    def __mouseHandler(self, event, x, y, flags, params):
+        _, self.img = self.cam.read()
+        if event == cv.CV_EVENT_LBUTTONDOWN and not self.mouse_drag:
+            self.mouse_p1 = (x, y)
+            self.mouse_drag = True
+        elif event == cv.CV_EVENT_MOUSEMOVE and self.mouse_drag:
+            cv2.rectangle(self.img, self.mouse_p1, (x, y), (255, 0, 0), 1, 8, 0)
+        elif event == cv.CV_EVENT_LBUTTONUP and self.mouse_drag:
+            self.mouse_p2 = (x, y)
+            self.mouse_drag=False
+        cv2.imshow("img",self.img)
+        cv2.waitKey(30)
+        if self.mouse_p1 and self.mouse_p2:
+            cv2.destroyWindow("img")
+            print self.mouse_p1
+            print self.mouse_p2
+            xmax = max(self.mouse_p1[0],self.mouse_p2[0])
+            xmin = min(self.mouse_p1[0],self.mouse_p2[0])
+            ymax = max(self.mouse_p1[1],self.mouse_p2[1])
+            ymin = min(self.mouse_p1[1],self.mouse_p2[1])
+            self.bb = [xmin,ymin,xmax-xmin,ymax-ymin]
+            self.track()
+
+    def track(self):
+        oldg = cv2.cvtColor(self.img, cv2.cv.CV_BGR2GRAY)
+        bb = self.bb
+        bb = [bb[0], bb[1], bb[0]+bb[3], bb[1]+bb[3]]
+        while True:
+            _, img = self.cam.read()
+            newg = cv2.cvtColor(img, cv2.cv.CV_BGR2GRAY)
+            newbb, shift = fbtrack(oldg, newg, bb, 12, 12, 3, 12)
+            print newbb, "newbb", shift, "shift"
+            oldg = newg
             bb = newbb
-            img1 = cam.getImage()
-        except KeyboardInterrupt:
-            break
+            cv2.rectangle(img, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 0))
+            cv2.imshow("Media Flow Tracker", img)
+            k = cv2.waitKey(10)
+            if k == 27:
+                break
